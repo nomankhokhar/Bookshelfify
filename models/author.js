@@ -1,25 +1,27 @@
-const mongoose = require('mongoose');
-const Book = require('./book');
+import mongoose from 'mongoose';
+import Book from './book.js'; // Assuming book.js exports the Book model properly
 
 const authorSchema = new mongoose.Schema({
-    name:{
-        type : String,
+    name: {
+        type: String,
         required: true
     }
 });
 
-authorSchema.pre('remove', function(next) {
-    Book.find({author : this._id }, (err, books)=>{
-        if (err) {
-            next(err);
-        }
-        else if(books.length > 0)
-        {
-            next(new Error('This author has books Still'));
-        }else{
+// Using async/await for better readability
+authorSchema.pre('remove', async function (next) {
+    try {
+        const books = await Book.find({ author: this._id });
+        if (books.length > 0) {
+            next(new Error('This author has books still'));
+        } else {
             next();
         }
-    })
+    } catch (error) {
+        next(error);
+    }
 });
 
-module.exports = mongoose.model('Author', authorSchema);
+const Author = mongoose.model('Author', authorSchema);
+
+export default Author;

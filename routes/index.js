@@ -1,22 +1,16 @@
-const express = require('express');
+import express from 'express';
+import Book from '../models/book.js';
+
 const router = express.Router();
-const Book = require('../models/book');
 
+router.get('/', async (req, res) => {
+  try {
+    const books = await Book.find().sort({ createdAt: 'desc' }).limit(10).exec();
+    res.render('index', { books: books });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
 
-router.get('/', async (req,res) => {
-    let books;
-    try {
-        books = await Book.find().find().sort({createdAt : "desc"}).limit(10).exec();
-    } catch  {
-        books = [];
-    }
-    res.render('index', {books : books });   // render mean file rendering
-})
-
-// Upper and Lower Both are Same
-
-// router.route('/').get((req,res)=>{
-//     res.send('Hello Jan');
-// })
-
-module.exports = router;
+export default router;

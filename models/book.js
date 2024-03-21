@@ -1,7 +1,8 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose';
 
+const { Schema } = mongoose;
 
-const bookSchema = new mongoose.Schema({
+const bookSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -28,19 +29,21 @@ const bookSchema = new mongoose.Schema({
   },
   coverImageType: {
     type: String,
-    required : true
+    required: true
   },
   author: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true,
     ref: 'Author'
   }
-})
+});
 
 bookSchema.virtual('coverImagePath').get(function() {
-  if (this.coverImage != null && this.coverImageType != null)  {
+  if (this.coverImage != null && this.coverImageType != null) {
     return `data:${this.coverImageType};charset=utf-8;base64,${this.coverImage.toString('base64')}`;
   }
-})
+});
 
-module.exports = mongoose.model('Book', bookSchema);
+const Book = mongoose.model('Book', bookSchema);
+
+export default Book;
