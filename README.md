@@ -1,4 +1,3 @@
-```markdown
 # Node.js Author and Book Management Application
 
 This Node.js application provides APIs to manage authors and books, including the following functionalities:
@@ -36,4 +35,3 @@ You can configure the application settings in the `config.js` file.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-```
